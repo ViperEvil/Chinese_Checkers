@@ -1,8 +1,13 @@
-package org.example;
+package chinese.checkers;
+
+import chinese.checkers.ui.Game_Window;
+
+import java.util.Locale;
 
 public class Main {
     public static void main(String[] args) {
+        Locale.setDefault(Locale.ROOT);
 
-        System.out.println("Hello world!");
+        java.awt.EventQueue.invokeLater(() -> new Game_Window().setVisible(true));
     }
 }
