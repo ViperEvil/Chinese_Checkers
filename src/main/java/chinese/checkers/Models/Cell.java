@@ -1,12 +1,12 @@
 package chinese.checkers.Models;
 
 public class Cell {
-    private int r, q;
+    private int x, y;
     private Piece piece;
 
     public Cell(int row, int col) {
-        this.r = row;
-        this.q = col;
+        this.x = row;
+        this.y = col;
     }
 
     public boolean isEmpty() {
@@ -21,11 +21,11 @@ public class Cell {
         return this.piece;
     }
 
-    public int getQ() {
-        return q;
+    public int getY() {
+        return y;
     }
 
-    public int getR() {
-        return r;
+    public int getX() {
+        return x;
     }
 }

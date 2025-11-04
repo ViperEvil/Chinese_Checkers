@@ -5,6 +5,7 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="2800a565-29da-4937-840b-4a26c54fd88a" name="Changes" comment="">
+      <change afterPath="$PROJECT_DIR$/.idea/.name" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/misc.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/misc.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
@@ -13,12 +14,8 @@
       <change beforePath="$PROJECT_DIR$/src/main/java/chinese/checkers/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/chinese/checkers/Main.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/chinese/checkers/Models/Board.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/chinese/checkers/Models/Board.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/chinese/checkers/Models/Cell.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/chinese/checkers/Models/Cell.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/chinese/checkers/Models/Piece.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/chinese/checkers/Models/Piece.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/chinese/checkers/Models/Player.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/chinese/checkers/Models/Player.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/chinese/checkers/Models/PlayerColor.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/chinese/checkers/Models/PlayerColor.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/chinese/checkers/Models/Coordinate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/chinese/checkers/Models/Coordinate.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/chinese/checkers/ui/BoardPanel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/chinese/checkers/ui/BoardPanel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/chinese/checkers/ui/Game_Window.form" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/chinese/checkers/ui/Game_Window.form" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/chinese/checkers/ui/Game_Window.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/chinese/checkers/ui/Game_Window.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -41,9 +38,9 @@
   <component name="Git.Settings">
     <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
   </component>
-  <component name="ProjectColorInfo"><![CDATA[{
-  "associatedIndex": 4
-}]]></component>
+  <component name="ProjectColorInfo">{
+  &quot;associatedIndex&quot;: 4
+}</component>
   <component name="ProjectId" id="34Sa3rYf67aVMb56N8n8syg34Eh" />
   <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
   <component name="ProjectViewState">
@@ -53,12 +50,15 @@
   <component name="PropertiesComponent"><![CDATA[{
   "keyToString": {
     "Application.Main.executor": "Run",
+    "Gradle.Chinese_Checkers [:chinese.checkers.Main.main()].executor": "Run",
     "Gradle.Chinesse_Checkers [:chinese.checkers.Main.main()].executor": "Run",
+    "Java Scratch.StarBoardTest.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "RunOnceActivity.git.unshallow": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "main",
     "kotlin-language-version-configured": "true",
-    "last_opened_file_path": "C:/Учёба/Chinese_Checkers",
+    "last_opened_file_path": "/home/akemi/CGG/Task3",
     "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.22908746",
     "project.structure.side.proportion": "0.37471265"
@@ -69,7 +69,7 @@
     ]
   }
 }]]></component>
-  <component name="RunManager" selected="Application.chinese.checkers.Main">
+  <component name="RunManager" selected="Java Scratch.StarBoardTest">
     <configuration name="ChineseCheckers" type="Application" factoryName="Application" temporary="true" nameIsGenerated="true">
       <option name="MAIN_CLASS_NAME" value="ChineseCheckers" />
       <method v="2">
@@ -102,8 +102,16 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="StarBoardTest" type="Java Scratch" temporary="true" nameIsGenerated="true">
+      <option name="MAIN_CLASS_NAME" value="StarBoardTest" />
+      <option name="SCRATCH_FILE_URL" value="file://$APPLICATION_CONFIG_DIR$/scratches/StarBoardTest.java" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Java Scratch.StarBoardTest" />
         <item itemvalue="Application.ChineseCheckers" />
         <item itemvalue="Application.chinese.checkers.Main" />
         <item itemvalue="Application.Main" />
