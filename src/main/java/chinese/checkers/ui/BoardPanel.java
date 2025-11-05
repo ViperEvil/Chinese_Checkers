@@ -5,6 +5,7 @@ import java.awt.*;
 import java.awt.event.MouseAdapter;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseMotionAdapter;
+import java.util.ArrayList;
 import java.util.List;
 
 import chinese.checkers.Models.Board;
@@ -16,13 +17,15 @@ public class BoardPanel extends JPanel {
     private final int cellRadius = 20;  // радиус кружочка
     private final int cellSpacing = 35; // расстояние между центрами
     private Cell hoveredCell = null;
-    private List<Cell> cellNeighbours = null;
+    private Cell selectedCell = null;
+    private List<Cell> possibleCellMoves = new ArrayList<>();
 
     public BoardPanel(Board board) {
         this.board = board;
         setPreferredSize(new Dimension(1000, 1000));
         setBackground(new Color(240, 240, 240));
 
+        //Обработчик наведения мыши на ячейку с последующей подсветкой
         addMouseMotionListener(new MouseMotionAdapter() {
             @Override
             public void mouseMoved(MouseEvent e) {
@@ -38,6 +41,27 @@ public class BoardPanel extends JPanel {
             @Override
             public void mouseExited(MouseEvent e) {
                 hoveredCell = null;
+                repaint();
+            }
+
+            @Override
+            public void mouseClicked(MouseEvent e) {
+                Cell cell = getCellAtPoint(e.getX(), e.getY());
+                if (cell != null && cell.getPiece() != null) {
+                    selectedCell = cell;
+                    possibleCellMoves.clear();
+
+                    for (Cell neighbor : board.getNeighbors(cell)) {
+                        if (neighbor.getPiece() == null) {
+                            possibleCellMoves.add(neighbor);
+                        }
+                    }
+                } else {
+                    //Если выбрали где-то в другом месте - ячейки перестанут быть выделенными
+                    selectedCell = null;
+                    possibleCellMoves.clear();
+                }
+
                 repaint();
             }
         });
@@ -63,6 +87,18 @@ public class BoardPanel extends JPanel {
             double screenX = cx + (x - y) * cellSpacing * Math.sqrt(3) / 2;
             double screenY = cy - (x + y) * cellSpacing * 1.2;
 
+            //Области допустимых ходов при нажатии на фишку игрока
+            if (selectedCell != null && possibleCellMoves.contains(cell)) {
+                g2.setColor(new Color(150, 255, 150));
+                g2.fillOval(
+                        (int) (screenX - cellRadius - 4),
+                        (int) (screenY - cellRadius - 4),
+                        (int) ((cellRadius + 4) * 2),
+                        (int) ((cellRadius + 4) * 2)
+                );
+            }
+
+            //Обводка ячейки при наведении мыши на ячейку
             if (cell == hoveredCell) {
                 g2.setColor(new Color(255, 255, 150)); // мягкая жёлтая подсветка
                 g2.fillOval(

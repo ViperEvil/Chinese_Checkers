@@ -12,8 +12,8 @@ public class Board {
         cells = new HashMap<>();
         adjacency = new HashMap<>();
         initBoard();
-        buildAdjacency();
         initPieces();
+        buildAdjacency();
     }
 
     public Cell getCell(int x, int y) {
@@ -99,7 +99,7 @@ public class Board {
             for (int[] d : directions) {
                 int nx = cell.getX() + d[0];
                 int ny = cell.getY() + d[1];
-                Cell neighbor = new Cell(nx, ny);
+                Cell neighbor = cells.get(new Coordinate(nx, ny));
                 if (neighbor != null) {
                     neighbors.add(neighbor);
                 }
@@ -115,6 +115,11 @@ public class Board {
             int z = -x - y;
             int r = size;
 
+            /**
+             * TODO: Сделать что-то с Player с их именами.
+             * По-хорошему - всех назвать ботами и одному дать ник/имя игрока.
+             * Захардкоженное "Test" лучше убрать, либо вообще не реализовывать Player.
+             */
             if (y <= r && y > 0 && x > 0 && x <= r) {
                 cell.setPiece(new Piece(new Player("Test"), PlayerColor.BLACK));
             }
@@ -144,7 +149,7 @@ public class Board {
             }
 
             if (Math.abs(x) <= r && Math.abs(y) <= r && Math.abs(z) <= r)
-                cell.setPiece(new Piece(null, PlayerColor.GRAY));
+                cell.setPiece(null);
         }
     }
 
