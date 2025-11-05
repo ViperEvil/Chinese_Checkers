@@ -46,16 +46,22 @@ public class BoardPanel extends JPanel {
 
             @Override
             public void mouseClicked(MouseEvent e) {
-                Cell cell = getCellAtPoint(e.getX(), e.getY());
-                if (cell != null && cell.getPiece() != null) {
-                    selectedCell = cell;
+                Cell clickedCell = getCellAtPoint(e.getX(), e.getY());
+                if (clickedCell != null && clickedCell.getPiece() != null) {
+                    selectedCell = clickedCell;
                     possibleCellMoves.clear();
 
-                    for (Cell neighbor : board.getNeighbors(cell)) {
+                    for (Cell neighbor : board.getNeighbors(clickedCell)) {
                         if (neighbor.getPiece() == null) {
                             possibleCellMoves.add(neighbor);
                         }
                     }
+                } else if (possibleCellMoves.contains(clickedCell)) {
+                    clickedCell.setPiece(selectedCell.getPiece());
+                    selectedCell.setPiece(null);
+
+                    selectedCell = null;
+                    possibleCellMoves.clear();
                 } else {
                     //Если выбрали где-то в другом месте - ячейки перестанут быть выделенными
                     selectedCell = null;
