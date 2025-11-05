@@ -7,18 +7,13 @@ public class Board {
     private Map<Coordinate, Cell> cells;
     private Map<Cell, List<Cell>> adjacency;
 
-    //private final int gridSize = 13;
-
-//    public Board() {
-//        initCells();
-//        initPieces();
-//    }
 
     public Board() {
         cells = new HashMap<>();
         adjacency = new HashMap<>();
         initBoard();
         buildAdjacency();
+        initPieces();
     }
 
     public Cell getCell(int x, int y) {
@@ -51,6 +46,7 @@ public class Board {
     //Шестиугольник представляет собой 3д, с тремя осями (с наклоном в сторону).
     //Так проще понять, каким образом получаются x y и z для представления
     //звезды давида (или базовый шестиугольник)
+    // https://www.google.com/url?sa=i&url=https%3A%2F%2Fhabr.com%2Fru%2Farticles%2F319644%2F&psig=AOvVaw37RwwMgH7U_uEjp-mI0JfY&ust=1762338670171000&source=images&cd=vfe&opi=89978449&ved=0CBUQjRxqGAoTCIC64aSl2JADFQAAAAAdAAAAABC4AQ
     private boolean isInStar(int x, int y) {
         // Упрощённое условие: можно заменить на реальную маску звезды
         int z = -x - y;
@@ -109,6 +105,46 @@ public class Board {
                 }
             }
             adjacency.put(cell, neighbors);
+        }
+    }
+
+    private void initPieces() {
+        for (Cell cell : cells.values()) {
+            int x = cell.getX();
+            int y = cell.getY();
+            int z = -x - y;
+            int r = size;
+
+            if (y <= r && y > 0 && x > 0 && x <= r) {
+                cell.setPiece(new Piece(new Player("Test"), PlayerColor.BLACK));
+            }
+            //Нижний луч
+            if (y < 0 && y >= -r && x >= -r && x < 0) {
+                cell.setPiece(new Piece(new Player("Test"), PlayerColor.BLUE));
+            }
+
+            // Право-верхний луч
+            if (x > r && y < 0 && y >= -r && z >= -r) {
+                cell.setPiece(new Piece(new Player("Test"), PlayerColor.RED));
+            }
+
+            // Право-нижний луч
+            if (z <= r && x > 0 && x <= r && y < 0) {
+                cell.setPiece(new Piece(new Player("Test"), PlayerColor.YELLOW));
+            }
+
+            // Лево-нижний луч
+            if (x < -r && y > 0 && y <= r && z <= r) {
+                cell.setPiece(new Piece(new Player("Test"), PlayerColor.GREEN));
+            }
+
+            // Лево-верхний луч
+            if (x >= -r && y >= r && z >= -r) {
+                cell.setPiece(new Piece(new Player("Test"), PlayerColor.WHITE));
+            }
+
+            if (Math.abs(x) <= r && Math.abs(y) <= r && Math.abs(z) <= r)
+                cell.setPiece(new Piece(null, PlayerColor.GRAY));
         }
     }
 

@@ -1,19 +1,25 @@
 package chinese.checkers.Models;
 
+import java.awt.*;
+
 public class Piece {
     private Player owner;
     private PlayerColor color;
 
     public Piece(Player owner) {
         this.owner = owner;
-        this.color = owner.getColor();
+    }
+
+    public Piece(Player owner, PlayerColor color) {
+        this.owner = owner;
+        this.color = color;
     }
 
     public Player getOwner() {
         return this.owner;
     }
 
-    public PlayerColor getColor() {
-        return color;
+    public Color getColor() {
+        return color.getColor();
     }
 }
