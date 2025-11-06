@@ -1,5 +1,6 @@
 package chinese.checkers.Models;
 
+import chinese.checkers.Models.PlayerColor.PlayerColor;
 import java.awt.*;
 
 public class Piece {
@@ -19,7 +20,7 @@ public class Piece {
         return this.owner;
     }
 
-    public Color getColor() {
-        return color.getColor();
+    public PlayerColor getColor() {
+        return color;
     }
 }
