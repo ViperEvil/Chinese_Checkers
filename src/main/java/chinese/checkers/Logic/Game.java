@@ -71,7 +71,7 @@ public class Game {
 
                     findJumps(jumpCell, jumps, visited);
 
-                    //visited.remove(jumpCell);
+                    visited.remove(jumpCell);
                 }
             }
         }

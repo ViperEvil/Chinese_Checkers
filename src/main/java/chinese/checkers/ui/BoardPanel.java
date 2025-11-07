@@ -79,6 +79,16 @@ public class BoardPanel extends JPanel {
             double screenX = cx + (x - y) * cellSpacing * Math.sqrt(3) / 2;
             double screenY = cy - (x + y) * cellSpacing * 1.2;
 
+            if (game.getSelectedCell() != null && game.getSelectedCell().equals(cell)) {
+                g2.setColor(new Color(34, 104, 0, 255));
+                g2.fillOval(
+                        (int) (screenX - cellRadius - 4),
+                        (int) (screenY - cellRadius - 4),
+                        ((cellRadius + 4) * 2),
+                        ((cellRadius + 4) * 2)
+                );
+            }
+
             //Области допустимых ходов при нажатии на фишку игрока
             if (game.getSelectedCell() != null && game.getPossibleCellMoves().contains(cell)) {
                 g2.setColor(new Color(150, 255, 150));
@@ -92,7 +102,7 @@ public class BoardPanel extends JPanel {
 
             //Обводка ячейки при наведении мыши на ячейку
             if (cell == hoveredCell) {
-                g2.setColor(new Color(255, 255, 150)); // мягкая жёлтая подсветка
+                g2.setColor(new Color(255, 255, 150));
                 g2.fillOval(
                         (int) (screenX - cellRadius - 4),
                         (int) (screenY - cellRadius - 4),
