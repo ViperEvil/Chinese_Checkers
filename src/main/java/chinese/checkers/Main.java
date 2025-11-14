@@ -1,7 +1,6 @@
 package chinese.checkers;
 
 import chinese.checkers.ui.ChooseGame;
-import chinese.checkers.ui.Game_Window;
 
 import java.util.Locale;
 
