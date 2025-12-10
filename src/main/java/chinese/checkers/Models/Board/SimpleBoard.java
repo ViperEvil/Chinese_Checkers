@@ -101,6 +101,22 @@ public abstract class SimpleBoard {
         }
     }
 
+    protected StarPoint getStarPoint(Cell c) {
+        int x = c.getX();
+        int y = c.getY();
+        int z = -x - y;
+        int r = size;
+
+        if (y <= r && y > 0 && x > 0 && x <= r && z < -4) return StarPoint.TOP;
+        if (x > 4 && y < 0) return StarPoint.TOP_RIGHT;
+        if (x > 0 && y < -4) return StarPoint.BOTTOM_RIGHT;
+        if (y < 0 && y >= -r && x >= -r && x < 0 && z > 4) return StarPoint.BOTTOM;
+        if (y > 0 && x < -4) return StarPoint.BOTTOM_LEFT;
+        if (y > 4 && x < 4) return StarPoint.TOP_LEFT;
+
+        return null;
+    }
+
     public Map<PlayerColor, Set<Cell>> getGoalZones() {
         return goalZones;
     }

@@ -5,18 +5,25 @@ import chinese.checkers.Models.Cell;
 import chinese.checkers.Models.Piece;
 import chinese.checkers.Models.PlayerColor.PlayerColor;
 
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class Game {
     private final SimpleBoard board;
     private Cell selectedCell = null;
     private final List<Cell> possibleCellMoves = new ArrayList<>();
+    private PlayerColor currentTurn = PlayerColor.BLUE;
+    private List<PlayerColor> turnOrder;
+    int currentTurnIndex;
+
 
     public Game(SimpleBoard board) {
         this.board = board;
+
+        turnOrder = new ArrayList<>(board.getHomeZones().keySet());
+        turnOrder.sort(Comparator.comparing(Enum::ordinal));
+
+        currentTurnIndex = 0;
+        currentTurn = turnOrder.get(currentTurnIndex);
     }
 
     public void selectedCell(Cell cell) {
@@ -32,6 +39,10 @@ public class Game {
 
     public void moveSelectedCell(Cell target) {
         if (target != null && possibleCellMoves.contains(target)) {
+            if (selectedCell.getPiece().getColor() != currentTurn) {
+                return;
+            }
+
             target.setPiece(selectedCell.getPiece());
             selectedCell.setPiece(null);
 
@@ -43,6 +54,8 @@ public class Game {
 
             if (checkWin(movedColor)) {
                 System.out.printf("Player %s win%n", movedColor);
+            } else {
+                nextTurn();
             }
         }
     }
@@ -97,6 +110,16 @@ public class Game {
             }
         }
         return true;
+    }
+
+    private void nextTurn() {
+        currentTurnIndex = (currentTurnIndex + 1) % turnOrder.size();
+        currentTurn = turnOrder.get(currentTurnIndex);
+        System.out.println("Next turn: " + currentTurn);
+    }
+
+    public String getCurrentTurn() {
+        return currentTurn.toString();
     }
 
     public SimpleBoard getBoard() {
