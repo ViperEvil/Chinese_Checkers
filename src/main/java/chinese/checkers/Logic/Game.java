@@ -14,6 +14,8 @@ public class Game {
     private PlayerColor currentTurn = PlayerColor.BLUE;
     private List<PlayerColor> turnOrder;
     int currentTurnIndex;
+    private PlayerColor nextTurn;
+    private Runnable onTurnChanged;
 
 
     public Game(SimpleBoard board) {
@@ -24,6 +26,7 @@ public class Game {
 
         currentTurnIndex = 0;
         currentTurn = turnOrder.get(currentTurnIndex);
+        nextTurn = turnOrder.get((currentTurnIndex + 1) % turnOrder.size());
     }
 
     public void selectedCell(Cell cell) {
@@ -112,14 +115,27 @@ public class Game {
         return true;
     }
 
+    public void setOnTurnChanged(Runnable callback) {
+        this.onTurnChanged = callback;
+    }
+
     private void nextTurn() {
         currentTurnIndex = (currentTurnIndex + 1) % turnOrder.size();
         currentTurn = turnOrder.get(currentTurnIndex);
+        nextTurn = turnOrder.get((currentTurnIndex + 1) % turnOrder.size());
         System.out.println("Next turn: " + currentTurn);
+
+        if (onTurnChanged != null) {
+            onTurnChanged.run();
+        }
     }
 
     public String getCurrentTurn() {
         return currentTurn.toString();
+    }
+
+    public String getNextTurn() {
+        return nextTurn.toString();
     }
 
     public SimpleBoard getBoard() {
