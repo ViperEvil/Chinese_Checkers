@@ -2,6 +2,8 @@ package chinese.checkers.Logic;
 
 import chinese.checkers.Models.Board.SimpleBoard;
 import chinese.checkers.Models.Cell;
+import chinese.checkers.Models.Piece;
+import chinese.checkers.Models.PlayerColor.PlayerColor;
 
 import java.util.ArrayList;
 import java.util.HashSet;
@@ -32,8 +34,16 @@ public class Game {
         if (target != null && possibleCellMoves.contains(target)) {
             target.setPiece(selectedCell.getPiece());
             selectedCell.setPiece(null);
+
+            PlayerColor movedColor = target.getPiece().getColor();
+            System.out.println(movedColor);
+
             selectedCell = null;
             possibleCellMoves.clear();
+
+            if (checkWin(movedColor)) {
+                System.out.printf("Player %s win%n", movedColor);
+            }
         }
     }
 
@@ -75,6 +85,18 @@ public class Game {
                 }
             }
         }
+    }
+
+    private boolean checkWin(PlayerColor color) {
+        Set<Cell> goalZone = board.getGoalZone(color);
+
+        for (Cell cell : goalZone) {
+            Piece piece = cell.getPiece();
+            if (piece == null || piece.getColor() != color) {
+                return false;
+            }
+        }
+        return true;
     }
 
     public SimpleBoard getBoard() {

@@ -1,6 +1,7 @@
 package chinese.checkers.Models.Board;
 
 import chinese.checkers.Models.*;
+import chinese.checkers.Models.PlayerColor.PlayerColor;
 
 import java.util.*;
 
@@ -8,6 +9,8 @@ public abstract class SimpleBoard {
     protected final int size;
     protected Map<Coordinate, Cell> cells;
     protected Map<Cell, List<Cell>> adjacency;
+    protected Map<PlayerColor, Set<Cell>> homeZones;
+    protected Map<PlayerColor, Set<Cell>> goalZones;
 
     /**
      * Размер строго 4. Т.к. в реальности размер и поле всегда одно и то же.
@@ -18,6 +21,8 @@ public abstract class SimpleBoard {
         size = 4;
         cells = new HashMap<>();
         adjacency = new HashMap<>();
+        homeZones = new HashMap<>();
+        goalZones = new HashMap<>();
     }
 
     protected void initBoard() {
@@ -94,6 +99,22 @@ public abstract class SimpleBoard {
             }
             adjacency.put(cell, neighbors);
         }
+    }
+
+    public Map<PlayerColor, Set<Cell>> getGoalZones() {
+        return goalZones;
+    }
+
+    public Map<PlayerColor, Set<Cell>> getHomeZones() {
+        return homeZones;
+    }
+
+    public Set<Cell> getHomeZone(PlayerColor color) {
+        return homeZones.get(color);
+    }
+
+    public Set<Cell> getGoalZone(PlayerColor color) {
+        return goalZones.get(color);
     }
 
     protected abstract void initPieces();
