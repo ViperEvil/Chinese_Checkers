@@ -2,27 +2,33 @@ package chinese.checkers.Logic;
 
 import chinese.checkers.Models.Board.SimpleBoard;
 import chinese.checkers.Models.Cell;
+import chinese.checkers.Models.LeaderBoard;
 import chinese.checkers.Models.Piece;
 import chinese.checkers.Models.PlayerColor.PlayerColor;
 
+import javax.swing.*;
 import java.util.*;
+import java.util.function.Consumer;
 
 public class Game {
     private final SimpleBoard board;
     private Cell selectedCell = null;
     private final List<Cell> possibleCellMoves = new ArrayList<>();
     private PlayerColor currentTurn = PlayerColor.BLUE;
-    private List<PlayerColor> turnOrder;
+    private final List<PlayerColor> turnOrder;
     int currentTurnIndex;
     private PlayerColor nextTurn;
     private Runnable onTurnChanged;
+    private final LeaderBoard leaderBoard;
+    private Consumer<PlayerColor> onGameWon;
 
-
-    public Game(SimpleBoard board) {
+    public Game(SimpleBoard board, LeaderBoard leaderBoard) {
         this.board = board;
 
         turnOrder = new ArrayList<>(board.getHomeZones().keySet());
         turnOrder.sort(Comparator.comparing(Enum::ordinal));
+
+        this.leaderBoard = leaderBoard;
 
         currentTurnIndex = 0;
         currentTurn = turnOrder.get(currentTurnIndex);
@@ -56,7 +62,12 @@ public class Game {
             possibleCellMoves.clear();
 
             if (checkWin(movedColor)) {
-                System.out.printf("Player %s win%n", movedColor);
+                leaderBoard.addOneWin(movedColor);
+                System.out.printf("Player %s win (%d total wins)%n", movedColor, leaderBoard.getWinsCount(movedColor));
+
+                if (onGameWon != null) {
+                    onGameWon.accept(movedColor);
+                }
             } else {
                 nextTurn();
             }
@@ -127,6 +138,17 @@ public class Game {
 
         if (onTurnChanged != null) {
             onTurnChanged.run();
+        }
+    }
+
+    public void setOnGameWon(java.util.function.Consumer<PlayerColor> callback) {
+        this.onGameWon = callback;
+    }
+
+    public void forceWin(PlayerColor color) {
+        leaderBoard.addOneWin(color);
+        if (onGameWon != null) {
+            onGameWon.accept(color);
         }
     }
 

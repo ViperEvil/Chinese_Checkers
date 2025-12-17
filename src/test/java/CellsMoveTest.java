@@ -2,6 +2,7 @@ import chinese.checkers.Logic.Game;
 import chinese.checkers.Models.Board.BoardSixPlayers;
 import chinese.checkers.Models.Board.SimpleBoard;
 import chinese.checkers.Models.Cell;
+import chinese.checkers.Models.LeaderBoard;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -9,7 +10,8 @@ public class CellsMoveTest {
     @Test
     void testMoveSelectedCellToValidTarget() {
         SimpleBoard board = new BoardSixPlayers();
-        Game game = new Game(board);
+        LeaderBoard leaderBoard = new LeaderBoard();
+        Game game = new Game(board, leaderBoard);
 
         Cell selected = board.getCell(-4, -2);
         game.selectedCell(selected);
@@ -30,7 +32,8 @@ public class CellsMoveTest {
     @Test
     void testMoveSelectedCellToInvalidTarget() {
         SimpleBoard board = new BoardSixPlayers();
-        Game game = new Game(board);
+        LeaderBoard leaderBoard = new LeaderBoard();
+        Game game = new Game(board, leaderBoard);
 
         Cell selected = board.getCell(-4, -2);
         game.selectedCell(selected);
@@ -55,7 +58,8 @@ public class CellsMoveTest {
     @Test
     void testMoveSelectedCellWithoutSelection() {
         SimpleBoard board = new BoardSixPlayers();
-        Game game = new Game(board);
+        LeaderBoard leaderBoard = new LeaderBoard();
+        Game game = new Game(board, leaderBoard);
 
         Cell target = board.getCell(-4, -2);
 

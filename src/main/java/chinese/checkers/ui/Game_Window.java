@@ -2,6 +2,8 @@ package chinese.checkers.ui;
 
 import chinese.checkers.Logic.Game;
 import chinese.checkers.Models.Board.SimpleBoard;
+import chinese.checkers.Models.LeaderBoard;
+import chinese.checkers.Models.PlayerColor.PlayerColor;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -25,6 +27,13 @@ public class Game_Window extends JFrame {
     private JButton newGameMode;
     private JLabel curTurn;
     private JLabel nextTurn;
+    private JPanel leaderBoardPanel;
+    private JLabel leaderBoardLabel;
+
+    // FOR TESTING!
+    private JButton forceWin;
+
+    private final LeaderBoard leaderBoard;
 
     public void setCurTurn(String turn) {
         curTurn.setText("Current turn: " + turn);
@@ -34,9 +43,10 @@ public class Game_Window extends JFrame {
         nextTurn.setText("Next turn: " + turn);
     }
 
-    public Game_Window(Supplier<SimpleBoard> typeBoard) {
+    public Game_Window(Supplier<SimpleBoard> typeBoard, LeaderBoard leaderBoard) {
         board = typeBoard.get();
-        game = new Game(board);
+        this.leaderBoard = leaderBoard;
+        game = new Game(board, this.leaderBoard);
         boardPanel = new BoardPanel(board, game);
 
         boardContainer.setLayout(new BorderLayout());
@@ -44,6 +54,8 @@ public class Game_Window extends JFrame {
 
         curTurn.setText("Current turn: " + game.getCurrentTurn());
         nextTurn.setText("Next turn: " + game.getNextTurn());
+
+        updateLeaderBoardUI();
 
         this.setTitle("Китайские шашки");
         this.setContentPane(panelMain);
@@ -58,20 +70,24 @@ public class Game_Window extends JFrame {
             setNextTurn(game.getNextTurn());
         });
 
+        game.setOnGameWon(winner -> {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Player " + winner + " wins!",
+                    "Game over",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+
+            updateLeaderBoardUI();
+            restartGame(board = typeBoard.get());
+        });
+
         reset.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 board = typeBoard.get();
 
-                game = new Game(board);
-
-                boardContainer.removeAll();
-
-                boardPanel = new BoardPanel(board, game);
-                boardContainer.add(boardPanel, BorderLayout.CENTER);
-
-                boardContainer.revalidate();
-                boardContainer.repaint();
+                restartGame(board);
             }
         });
 
@@ -83,6 +99,62 @@ public class Game_Window extends JFrame {
                 new ChooseGame();
             }
         });
+
+        forceWin.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                game.forceWin(PlayerColor.BLUE);
+            }
+        });
+    }
+
+    private void restartGame(SimpleBoard curBoard) {
+        this.board = curBoard;
+
+        game = new Game(board, leaderBoard);
+
+        bindGame(game, curBoard);
+
+        boardContainer.removeAll();
+        boardPanel = new BoardPanel(board, game);
+        boardContainer.add(boardPanel, BorderLayout.CENTER);
+
+        boardContainer.revalidate();
+        boardContainer.repaint();
+    }
+
+    private void bindGame(Game game, SimpleBoard curBoard) {
+        game.setOnTurnChanged(() -> {
+            setCurTurn(game.getCurrentTurn());
+            setNextTurn(game.getNextTurn());
+        });
+
+        game.setOnGameWon(winner -> {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "Player " + winner + " wins!",
+                    "Game over",
+                    JOptionPane.INFORMATION_MESSAGE
+            );
+            updateLeaderBoardUI();
+            restartGame(curBoard);
+        });
+    }
+
+    private void updateLeaderBoardUI() {
+        StringBuilder sb = new StringBuilder("<html>");
+
+        sb.append("Leaderboard:<br><br>");
+
+        leaderBoard.getBoard().forEach((color, wins) ->
+                sb.append(color)
+                        .append(": ")
+                        .append(wins)
+                        .append("<br>")
+        );
+
+        sb.append("</html>");
+        leaderBoardLabel.setText(sb.toString());
     }
 
     {
@@ -101,23 +173,27 @@ public class Game_Window extends JFrame {
      */
     private void $$$setupUI$$$() {
         panelMain = new JPanel();
-        panelMain.setLayout(new GridLayoutManager(5, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panelMain.setLayout(new GridLayoutManager(6, 3, new Insets(0, 0, 0, 0), -1, -1));
         boardContainer = new JPanel();
         boardContainer.setLayout(new BorderLayout(0, 0));
-        panelMain.add(boardContainer, new GridConstraints(0, 1, 5, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        panelMain.add(boardContainer, new GridConstraints(0, 1, 6, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         final Spacer spacer1 = new Spacer();
         panelMain.add(spacer1, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         final JPanel panel1 = new JPanel();
-        panel1.setLayout(new GridLayoutManager(2, 1, new Insets(0, 0, 0, 0), -1, -1));
+        panel1.setLayout(new GridLayoutManager(2, 3, new Insets(0, 0, 0, 0), -1, -1));
         panelMain.add(panel1, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
         reset = new JButton();
         reset.setText("Reset");
         panel1.add(reset, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 60), new Dimension(100, 60), new Dimension(100, 60), 0, false));
         newGameMode = new JButton();
         newGameMode.setText("New Mode");
-        panel1.add(newGameMode, new GridConstraints(1, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 60), new Dimension(100, 60), new Dimension(100, 60), 0, false));
+        panel1.add(newGameMode, new GridConstraints(1, 0, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, new Dimension(100, 60), new Dimension(100, 60), new Dimension(100, 60), 0, false));
         final Spacer spacer2 = new Spacer();
-        panelMain.add(spacer2, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
+        panel1.add(spacer2, new GridConstraints(0, 1, 1, 2, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer3 = new Spacer();
+        panel1.add(spacer3, new GridConstraints(1, 2, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
+        final Spacer spacer4 = new Spacer();
+        panelMain.add(spacer4, new GridConstraints(5, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_VERTICAL, 1, GridConstraints.SIZEPOLICY_WANT_GROW, null, null, null, 0, false));
         curTurn = new JLabel();
         Font curTurnFont = this.$$$getFont$$$(null, -1, 24, curTurn.getFont());
         if (curTurnFont != null) curTurn.setFont(curTurnFont);
@@ -128,6 +204,22 @@ public class Game_Window extends JFrame {
         if (nextTurnFont != null) nextTurn.setFont(nextTurnFont);
         nextTurn.setText("nextTurn turn: ");
         panelMain.add(nextTurn, new GridConstraints(3, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(400, -1), new Dimension(400, -1), new Dimension(400, -1), 0, false));
+        leaderBoardPanel = new JPanel();
+        leaderBoardPanel.setLayout(new GridLayoutManager(1, 1, new Insets(0, 0, 0, 0), -1, -1));
+        panelMain.add(leaderBoardPanel, new GridConstraints(0, 2, 6, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        leaderBoardLabel = new JLabel();
+        Font leaderBoardLabelFont = this.$$$getFont$$$(null, -1, 20, leaderBoardLabel.getFont());
+        if (leaderBoardLabelFont != null) leaderBoardLabel.setFont(leaderBoardLabelFont);
+        leaderBoardLabel.setText("Winners");
+        leaderBoardPanel.add(leaderBoardLabel, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_WEST, GridConstraints.FILL_NONE, GridConstraints.SIZEPOLICY_FIXED, GridConstraints.SIZEPOLICY_FIXED, new Dimension(400, -1), new Dimension(400, -1), new Dimension(400, -1), 0, false));
+        final JPanel panel2 = new JPanel();
+        panel2.setLayout(new GridLayoutManager(1, 2, new Insets(0, 0, 0, 0), -1, -1));
+        panelMain.add(panel2, new GridConstraints(4, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_BOTH, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, null, null, null, 0, false));
+        forceWin = new JButton();
+        forceWin.setText("TEST");
+        panel2.add(forceWin, new GridConstraints(0, 0, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_CAN_SHRINK | GridConstraints.SIZEPOLICY_CAN_GROW, GridConstraints.SIZEPOLICY_FIXED, null, null, null, 0, false));
+        final Spacer spacer5 = new Spacer();
+        panel2.add(spacer5, new GridConstraints(0, 1, 1, 1, GridConstraints.ANCHOR_CENTER, GridConstraints.FILL_HORIZONTAL, GridConstraints.SIZEPOLICY_WANT_GROW, 1, null, null, null, 0, false));
     }
 
     /**

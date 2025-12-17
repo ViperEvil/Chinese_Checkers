@@ -2,6 +2,7 @@ import chinese.checkers.Logic.Game;
 import chinese.checkers.Models.Board.BoardSixPlayers;
 import chinese.checkers.Models.Board.SimpleBoard;
 import chinese.checkers.Models.Cell;
+import chinese.checkers.Models.LeaderBoard;
 import chinese.checkers.Models.Piece;
 import chinese.checkers.Models.Player;
 import org.junit.jupiter.api.Assertions;
@@ -14,7 +15,8 @@ public class EdgeTests {
     @Test
     void testSelectCellOutsideBoard() {
         SimpleBoard board = new BoardSixPlayers();
-        Game game = new Game(board);
+        LeaderBoard leaderBoard = new LeaderBoard();
+        Game game = new Game(board, leaderBoard);
 
         Cell outside = board.getCell(100, 100); // null
         Assertions.assertNull(outside);
@@ -28,7 +30,8 @@ public class EdgeTests {
     @Test
     void testSelectSameCellTwice() {
         SimpleBoard board = new BoardSixPlayers();
-        Game game = new Game(board);
+        LeaderBoard leaderBoard = new LeaderBoard();
+        Game game = new Game(board, leaderBoard);
 
         Cell cell = board.getCell(-4, -2);
         Assertions.assertNotNull(cell.getPiece());

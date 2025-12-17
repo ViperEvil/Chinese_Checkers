@@ -2,6 +2,7 @@ import chinese.checkers.Logic.Game;
 import chinese.checkers.Models.Board.BoardSixPlayers;
 import chinese.checkers.Models.Board.SimpleBoard;
 import chinese.checkers.Models.Cell;
+import chinese.checkers.Models.LeaderBoard;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 
@@ -13,7 +14,8 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 public class CellsSelectTests {
     @Test
     void testNullCellSelection() {
-        Game game = new Game(new BoardSixPlayers());
+        LeaderBoard leaderBoard = new LeaderBoard();
+        Game game = new Game(new BoardSixPlayers(), leaderBoard);
 
         Cell cell = new Cell(0, 0);
         cell.setPiece(null);
@@ -29,7 +31,8 @@ public class CellsSelectTests {
     @Test
     void testWithSelectedCell() {
         SimpleBoard board = new BoardSixPlayers();
-        Game game = new Game(board);
+        LeaderBoard leaderBoard = new LeaderBoard();
+        Game game = new Game(board, leaderBoard);
 
         //Должна быть чёрная фишка
         Cell cellWithPiece = board.getCell(-4, -2);
@@ -47,7 +50,8 @@ public class CellsSelectTests {
     @Test
     void testReselectAnotherCell() {
         SimpleBoard board = new BoardSixPlayers();
-        Game game = new Game(board);
+        LeaderBoard leaderBoard = new LeaderBoard();
+        Game game = new Game(board, leaderBoard);
 
         Cell first = board.getCell(-4, -2);
         Cell second = board.getCell(-4, -3);
@@ -68,7 +72,8 @@ public class CellsSelectTests {
     @Test
     void testSelectEmptyCellClearsSelection() {
         SimpleBoard board = new BoardSixPlayers();
-        Game game = new Game(board);
+        LeaderBoard leaderBoard = new LeaderBoard();
+        Game game = new Game(board, leaderBoard);
 
         Cell filled = board.getCell(-4, -2);
         game.selectedCell(filled);
@@ -86,7 +91,8 @@ public class CellsSelectTests {
     @Test
     void testSelectNullClearsSelection() {
         SimpleBoard board = new BoardSixPlayers();
-        Game game = new Game(board);
+        LeaderBoard leaderBoard = new LeaderBoard();
+        Game game = new Game(board, leaderBoard);
 
         Cell withPiece = board.getCell(-4, -2);
         game.selectedCell(withPiece);
@@ -101,7 +107,8 @@ public class CellsSelectTests {
     @Test
     void testSwitchSelectedCells() {
         SimpleBoard board = new BoardSixPlayers();
-        Game game = new Game(board);
+        LeaderBoard leaderBoard = new LeaderBoard();
+        Game game = new Game(board, leaderBoard);
 
         Cell a = board.getCell(-4, -2);
         Cell b = board.getCell(-4, -3);

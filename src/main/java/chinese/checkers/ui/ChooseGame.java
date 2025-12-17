@@ -3,6 +3,7 @@ package chinese.checkers.ui;
 import chinese.checkers.Models.Board.BoardFourPlayers;
 import chinese.checkers.Models.Board.BoardSixPlayers;
 import chinese.checkers.Models.Board.BoardTwoPlayers;
+import chinese.checkers.Models.LeaderBoard;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
 import com.intellij.uiDesigner.core.Spacer;
@@ -36,23 +37,24 @@ public class ChooseGame extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 dispose();
 
-                new Game_Window(BoardSixPlayers::new);
+                LeaderBoard leaderBoard = new LeaderBoard();
+                new Game_Window(BoardSixPlayers::new, leaderBoard);
             }
         });
         a4PlayersButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-
-                new Game_Window(BoardFourPlayers::new);
+                LeaderBoard leaderBoard = new LeaderBoard();
+                new Game_Window(BoardFourPlayers::new, leaderBoard);
             }
         });
         a2PlayersButton.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
                 dispose();
-
-                new Game_Window(BoardTwoPlayers::new);
+                LeaderBoard leaderBoard = new LeaderBoard();
+                new Game_Window(BoardTwoPlayers::new, leaderBoard);
             }
         });
     }
