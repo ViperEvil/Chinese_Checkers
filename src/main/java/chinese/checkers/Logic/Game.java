@@ -21,6 +21,7 @@ public class Game {
     private Runnable onTurnChanged;
     private final LeaderBoard leaderBoard;
     private Consumer<PlayerColor> onGameWon;
+    private final MoveValidator moveValidator = new MoveValidator();
 
     public Game(SimpleBoard board, LeaderBoard leaderBoard) {
         this.board = board;
@@ -35,82 +36,47 @@ public class Game {
         nextTurn = turnOrder.get((currentTurnIndex + 1) % turnOrder.size());
     }
 
-    public void selectedCell(Cell cell) {
-        if (cell != null && cell.getPiece() != null) {
-            selectedCell = cell;
-            possibleCellMoves.clear();
-            calculatePossibleMoves(cell);
-        } else {
-            selectedCell = null;
-            possibleCellMoves.clear();
-        }
+    private void clearSelection() {
+        selectedCell = null;
+        possibleCellMoves.clear();
     }
+
+    public void selectedCell(Cell cell) {
+        if (cell == null || cell.getPiece() == null) {
+            clearSelection();
+            return;
+        }
+
+        if (cell.getPiece().getColor() != currentTurn) {
+            clearSelection();
+            return;
+        }
+
+        selectedCell = cell;
+        possibleCellMoves.clear();
+        possibleCellMoves.addAll(moveValidator.getPossibleMoves(board, cell));
+    }
+
 
     public void moveSelectedCell(Cell target) {
-        if (target != null && possibleCellMoves.contains(target)) {
-            if (selectedCell.getPiece().getColor() != currentTurn) {
-                return;
-            }
-
-            target.setPiece(selectedCell.getPiece());
-            selectedCell.setPiece(null);
-
-            PlayerColor movedColor = target.getPiece().getColor();
-            System.out.println(movedColor);
-
-            selectedCell = null;
-            possibleCellMoves.clear();
-
-            if (checkWin(movedColor)) {
-                leaderBoard.addOneWin(movedColor);
-                System.out.printf("Player %s win (%d total wins)%n", movedColor, leaderBoard.getWinsCount(movedColor));
-
-                if (onGameWon != null) {
-                    onGameWon.accept(movedColor);
-                }
-            } else {
-                nextTurn();
-            }
-        }
-    }
-
-    private void calculatePossibleMoves(Cell cell) {
-        for (Cell neighbor : board.getNeighbors(cell)) {
-            if (neighbor.getPiece() == null) {
-                possibleCellMoves.add(neighbor);
-            }
+        if (selectedCell == null || !possibleCellMoves.contains(target)) {
+            return;
         }
 
-        Set<Cell> visited = new HashSet<>();
-        visited.add(cell);
-        findJumps(cell, possibleCellMoves, visited);
-    }
+        target.setPiece(selectedCell.getPiece());
+        selectedCell.setPiece(null);
 
-    private void findJumps(Cell from, List<Cell> jumps, Set<Cell> visited) {
-        int[][] directions = {
-                {1, 0}, {0, 1}, {-1, 1},
-                {-1, 0}, {0, -1}, {1, -1}
-        };
+        PlayerColor movedColor = target.getPiece().getColor();
 
-        for (int[] d : directions) {
-            int nx = from.getX() + d[0];
-            int ny = from.getY() + d[1];
+        clearSelection();
 
-            Cell neighbor = board.getCell(nx, ny);
-            if (neighbor != null && neighbor.getPiece() != null) {
-                int jx = from.getX() + 2*d[0];
-                int jy = from.getY() + 2*d[1];
-                Cell jumpCell = board.getCell(jx, jy);
-
-                if (jumpCell != null && jumpCell.getPiece() == null && !visited.contains(jumpCell)) {
-                    jumps.add(jumpCell);
-                    visited.add(jumpCell);
-
-                    findJumps(jumpCell, jumps, visited);
-
-                    visited.remove(jumpCell);
-                }
+        if (checkWin(movedColor)) {
+            leaderBoard.addOneWin(movedColor);
+            if (onGameWon != null) {
+                onGameWon.accept(movedColor);
             }
+        } else {
+            nextTurn();
         }
     }
 
@@ -141,7 +107,7 @@ public class Game {
         }
     }
 
-    public void setOnGameWon(java.util.function.Consumer<PlayerColor> callback) {
+    public void setOnGameWon(Consumer<PlayerColor> callback) {
         this.onGameWon = callback;
     }
 

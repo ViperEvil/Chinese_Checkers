@@ -10,7 +10,7 @@ public class CellsMoveTest {
     @Test
     void testMoveSelectedCellToValidTarget() {
         SimpleBoard board = new BoardSixPlayers();
-        LeaderBoard leaderBoard = new LeaderBoard();
+        LeaderBoard leaderBoard = new LeaderBoard(board.getHomeZones().keySet());
         Game game = new Game(board, leaderBoard);
 
         Cell selected = board.getCell(-4, -2);
@@ -32,7 +32,7 @@ public class CellsMoveTest {
     @Test
     void testMoveSelectedCellToInvalidTarget() {
         SimpleBoard board = new BoardSixPlayers();
-        LeaderBoard leaderBoard = new LeaderBoard();
+        LeaderBoard leaderBoard = new LeaderBoard(board.getHomeZones().keySet());
         Game game = new Game(board, leaderBoard);
 
         Cell selected = board.getCell(-4, -2);
@@ -58,7 +58,7 @@ public class CellsMoveTest {
     @Test
     void testMoveSelectedCellWithoutSelection() {
         SimpleBoard board = new BoardSixPlayers();
-        LeaderBoard leaderBoard = new LeaderBoard();
+        LeaderBoard leaderBoard = new LeaderBoard(board.getHomeZones().keySet());
         Game game = new Game(board, leaderBoard);
 
         Cell target = board.getCell(-4, -2);

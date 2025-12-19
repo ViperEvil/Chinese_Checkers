@@ -2,15 +2,13 @@ package chinese.checkers.Models;
 
 import chinese.checkers.Models.PlayerColor.PlayerColor;
 
-import java.util.EnumMap;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 public class LeaderBoard {
     private final Map<PlayerColor, Integer> board = new EnumMap<>(PlayerColor.class);
 
-    public LeaderBoard() {
-        for (PlayerColor color : PlayerColor.values()) {
+    public LeaderBoard(Collection<PlayerColor> colors) {
+        for (PlayerColor color : colors) {
             board.put(color, 0);
         }
     }
@@ -24,7 +22,8 @@ public class LeaderBoard {
     }
 
     public void addOneWin(PlayerColor color) {
-        board.put(color, board.get(color) + 1);
+        //board.put(color, board.get(color) + 1);
+        board.computeIfPresent(color, (c, v) -> v + 1);
     }
 
     public void reset() {

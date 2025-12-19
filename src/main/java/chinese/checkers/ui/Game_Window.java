@@ -104,6 +104,7 @@ public class Game_Window extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 game.forceWin(PlayerColor.BLUE);
+                restartGame(typeBoard.get());
             }
         });
     }

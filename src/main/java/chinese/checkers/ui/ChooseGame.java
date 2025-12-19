@@ -3,6 +3,8 @@ package chinese.checkers.ui;
 import chinese.checkers.Models.Board.BoardFourPlayers;
 import chinese.checkers.Models.Board.BoardSixPlayers;
 import chinese.checkers.Models.Board.BoardTwoPlayers;
+import chinese.checkers.Models.Board.SimpleBoard;
+import chinese.checkers.Models.GameMode;
 import chinese.checkers.Models.LeaderBoard;
 import com.intellij.uiDesigner.core.GridConstraints;
 import com.intellij.uiDesigner.core.GridLayoutManager;
@@ -32,30 +34,17 @@ public class ChooseGame extends JFrame {
 
         this.setLocationRelativeTo(null);
 
-        a6PlayersButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
+        bindGameMode(a2PlayersButton, GameMode.TWO);
+        bindGameMode(a4PlayersButton, GameMode.FOUR);
+        bindGameMode(a6PlayersButton, GameMode.SIX);
+    }
 
-                LeaderBoard leaderBoard = new LeaderBoard();
-                new Game_Window(BoardSixPlayers::new, leaderBoard);
-            }
-        });
-        a4PlayersButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-                LeaderBoard leaderBoard = new LeaderBoard();
-                new Game_Window(BoardFourPlayers::new, leaderBoard);
-            }
-        });
-        a2PlayersButton.addActionListener(new ActionListener() {
-            @Override
-            public void actionPerformed(ActionEvent e) {
-                dispose();
-                LeaderBoard leaderBoard = new LeaderBoard();
-                new Game_Window(BoardTwoPlayers::new, leaderBoard);
-            }
+    private void bindGameMode(JButton button, GameMode mode) {
+        button.addActionListener(e -> {
+            dispose();
+
+            LeaderBoard leaderBoard = mode.createLeaderBoard();
+            new Game_Window(mode.getBoardFactory(), leaderBoard);
         });
     }
 
